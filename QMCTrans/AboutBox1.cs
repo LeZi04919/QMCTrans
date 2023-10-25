@@ -16,10 +16,10 @@ namespace QMCTrans
             InitializeComponent();
             this.Text = String.Format("关于 {0}", AssemblyTitle);
             this.labelProductName.Text = AssemblyProduct;
-            this.labelVersion.Text = String.Format("版本 {0}", AssemblyVersion);
+            //this.labelVersion.Text = String.Format("版本 {0}", AssemblyVersion);
             this.labelCopyright.Text = AssemblyCopyright;
             this.labelCompanyName.Text = AssemblyCompany;
-            this.textBoxDescription.Text = AssemblyDescription;
+            //this.textBoxDescription.Text = AssemblyDescription;
         }
 
         #region 程序集特性访问器
@@ -105,6 +105,16 @@ namespace QMCTrans
         private void okButton_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void AboutBox1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void labelVersion_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

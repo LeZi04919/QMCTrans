@@ -15,9 +15,14 @@ namespace QMCTrans
 {
     public partial class Form1 : Form
     {
+        int cpu_count = Environment.ProcessorCount;
+        int success_conut;
+        int Error_count = 0;
+        bool delete_source = false;
         public Form1()
         {
             InitializeComponent();
+            Control.CheckForIllegalCrossThreadCalls = false;
         }
 
         private static bool isThreadRun = false;
@@ -70,7 +75,7 @@ namespace QMCTrans
         private void onAddButtonClick(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "QQ音乐加密文件|*.qmcflac;*.qmc0;*.qmc3;*.mflac|所有文件|*.*";
+            ofd.Filter = "QQ音乐加密文件|*.qmcflac;*.qmc0;*.qmc3;*.mflac;*.mflac0|所有文件|*.*";
             ofd.Title = "打开文件";
             ofd.RestoreDirectory = true;
             ofd.Multiselect = true;
@@ -91,6 +96,9 @@ namespace QMCTrans
                         case ".mflac":
                             lvi.SubItems.Add("flac");
                             break;
+                        case ".mflac0":
+                            lvi.SubItems.Add("flac");
+                            break;
                         default:
                             lvi.SubItems.Add("mp3");
                             break;
@@ -109,16 +117,19 @@ namespace QMCTrans
             fbd.ShowNewFolderButton = false;
             if (fbd.ShowDialog() == DialogResult.OK)
             {
+                FileList.Items.Clear();
                 DirectoryInfo DIFolder = new DirectoryInfo(fbd.SelectedPath);
                 FileSystemInfo[] files = DIFolder.GetFiles();
                 FileList.BeginUpdate();
-                foreach (var fFile in files) {
+                foreach (var fFile in files) 
+                {
                     var foundItem = FileList.FindItemWithText(fFile.FullName);
                     if (foundItem != null)
                         continue;
                     switch (fFile.Extension.ToLower())
                     {
                         case ".qmcflac":
+                        case ".mflac0":
                         case ".mflac":
                             var lvi = new ListViewItem();
                             lvi.Text = fFile.FullName;
@@ -139,6 +150,7 @@ namespace QMCTrans
                     }
                 }
                 FileList.EndUpdate();
+                MessageBox.Show("找到"+FileList.Items.Count.ToString()+"首音乐","Info",MessageBoxButtons.OK,MessageBoxIcon.Information);
             }
         }
 
@@ -150,52 +162,111 @@ namespace QMCTrans
 
         private void OnTransStart(object sender, EventArgs e)
         {
+            if(MessageBox.Show("是否删除源文件？","Info",MessageBoxButtons.OKCancel,MessageBoxIcon.Question) == DialogResult.OK)
+            {
+                delete_source = true;
+            }
+            else
+            {
+                delete_source = false;
+            }
+            StartButton.Enabled = false;
+            StartButton.Text = "转换中";
             if (FileList.Items.Count == 0)
+            {
+                MessageBox.Show("文件列表为空！","Error",MessageBoxButtons.YesNo,MessageBoxIcon.Error);
+                StartButton.Enabled = true; 
+                StartButton.Text = "转换";
                 return;
+            } 
             if (isThreadRun == true)
+            {
+                StartButton.Enabled = true;
+                StartButton.Text = "转换";
+                MessageBox.Show("线程正在运行！", "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
                 return;
-            Thread workThread = new Thread(new ThreadStart(EncryptThread));
-            workThread.Start();
-        }
-
-        delegate string[] GetFileList();
-        private string[] GetListFromFileList()
-        {
-            if (FileList.InvokeRequired)
-            {
-                GetFileList GFL = new GetFileList(GetListFromFileList);
-                return (string[])this.Invoke(GFL);
             }
-            else
+            success_conut = Error_count = 0;
+            for (int num=1;num <= cpu_count ;num++)
             {
-                string[] lists = new string[FileList.Items.Count];
-                int i = 0;
-                foreach(ListViewItem lvi in FileList.Items)
-                {
-                    lists[i++] = lvi.Text;
-                }
-                return lists;
+                Thread workThread = new Thread(() => EncryptThread(num));
+                workThread.Start();
+                Thread.Sleep(100);
             }
         }
 
-        delegate string[] GetFileExt();
-        private string[] GetFileExtFromList()
+        //delegate string[] GetFileList();
+        private List<string> GetListFromFileList(int cpu_id)
         {
-            if (FileList.InvokeRequired)
+            List<string> lists = new List<string>();
+            int i = 0;
+            int i2 = 0;
+            //bool isthefirst = true;
+            foreach(ListViewItem lvi in FileList.Items)
             {
-                GetFileExt GFE = new GetFileExt(GetFileExtFromList);
-                return (string[])this.Invoke(GFE);
-            }
-            else
-            {
-                string[] exts = new string[FileList.Items.Count];
-                int i = 0;
-                foreach(ListViewItem lvi in FileList.Items)
+                //if (i2 > FileList.Items.Count)
+                //{
+                //    MessageBox.Show("break," + i2.ToString() +","+ i.ToString(), (cpu_id - 1).ToString());
+                //    break;
+                //}
+                //if (isthefirst == false && i2 != ((cpu_id-1)+cpu_count))
+                //{
+                //    i2++;
+                //    MessageBox.Show("false,continue," + i2.ToString() + "," + i.ToString(), (cpu_id - 1).ToString());
+                //    continue;
+                //}
+                //else if(isthefirst == true&& i2!=(cpu_id-1) && (cpu_id-1) != 0)
+                //{
+                //    i2++; 
+                //    MessageBox.Show("true,continue," + i2.ToString() + "," + i.ToString(), (cpu_id - 1).ToString());
+                //    continue;
+                //}
+                //else if (isthefirst == true && (cpu_id - 1) == 0)
+                //{
+                //    i2++;
+                //   MessageBox.Show("true,continue," + i2.ToString() + "," + i.ToString(), (cpu_id - 1).ToString());
+                //    continue;
+                //}
+                if(i2 > FileList.Items.Count)
                 {
-                    exts[i++] = lvi.SubItems[1].Text; 
+                    break;
                 }
-                return exts;
+                if(i2 != ((i*cpu_count)+(cpu_id -1 )))
+                {
+                    i2++;
+                    continue;
+                }
+                lists.Add(lvi.Text);
+                //MessageBox.Show(lvi.Text);
+                i++;
+                i2++;
+                //isthefirst = false;
+            }  
+            return lists;
+        }
+        private List<string> GetFileExtFromList(int cpu_id)
+        {
+            List<string> exts = new List<string>();
+            int i = 0;
+            int i2 = 0;
+            bool isthefirst = true;
+            foreach (ListViewItem lvi in FileList.Items)
+            {
+                if (i2 > FileList.Items.Count)
+                {
+                    break;
+                }
+                if (i2 != ((i * cpu_count) + (cpu_id - 1)))
+                {
+                    i2++;
+                    continue;
+                }
+                exts.Add(lvi.SubItems[1].Text);
+                i++;
+                i2++;
+                //isthefirst = false;
             }
+            return exts;
         }
 
         delegate void updateStatue(string str,int num);
@@ -225,33 +296,43 @@ namespace QMCTrans
                 FileList.EndUpdate();
             }
         }
-        private void EncryptThread()
+        private void EncryptThread(int cpu_id)
         {
             isThreadRun = true;
-            string[] lists = GetListFromFileList();
-            string[] exts = GetFileExtFromList();
+
+            List<string> lists = GetListFromFileList(cpu_id);
+            List<string> exts = GetFileExtFromList(cpu_id);
             int N = 0;
             foreach (var stfile in lists)
             {
+                if(N >= exts.Count)
+                {
+                    break;
+                }
                 bool res = findUKeyFromFile(stfile);
                 string writeFile = Path.GetDirectoryName(stfile) + '\\' + Path.GetFileNameWithoutExtension(stfile) + '.' + exts[N];
                 if (File.Exists(writeFile) == true)
                 {
-                    updateStatueToFileList("完成", N);
-                    N++;
+                    updateStatueToFileList("完成", ((N * cpu_count) + (cpu_id - 1)));
+                    N ++;
+                    if(delete_source == true)
+                    {
+                        File.Delete(stfile);
+                    }
                     continue;
                 }
                 if(res == false)
                 {
-                    updateStatueToFileList("转换失败", N);
-                    N++;
+                    updateStatueToFileList("转换失败", ((N * cpu_count) + (cpu_id - 1)));
+                    N ++;
+                    Error_count++;
                     continue;
                 }
                 FileStream fsreadFile = new FileStream(stfile, FileMode.Open);
                 FileStream fswriteFile = new FileStream(writeFile, FileMode.CreateNew);
                 BinaryReader bsreadFile = new BinaryReader(fsreadFile);
                 BinaryWriter bswriteFile = new BinaryWriter(fswriteFile);
-                updateStatueToFileList("转换中", N);
+                updateStatueToFileList("转换中", ((N * cpu_count) + (cpu_id - 1)));
                 byte[] buffer = new byte[8192];
                 int readSize = 0;
                 int offset = 0;
@@ -268,10 +349,24 @@ namespace QMCTrans
                 bsreadFile.Close();
                 fswriteFile.Close();
                 fsreadFile.Close();
-                updateStatueToFileList("完成", N);
+                updateStatueToFileList("完成", ((N * cpu_count) + (cpu_id - 1)));
                 N++;
             }
             isThreadRun = false;
+            StartButton.Enabled = true;
+            success_conut++;
+            StartButton.Text = "转换";
+            if (success_conut >= cpu_count)
+            {
+                if (Error_count != 0)
+                {
+                    MessageBox.Show("转换完成！有"+Error_count.ToString()+"首转换失败", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("转换完成！", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
             return;
         }
 
@@ -320,6 +415,10 @@ namespace QMCTrans
             bsfReader.Close();
             fStream.Close();
             return findKey;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
         }
     }
 }

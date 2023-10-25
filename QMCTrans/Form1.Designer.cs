@@ -47,9 +47,11 @@
             this.lv_FileType,
             this.lv_Status});
             this.FileList.GridLines = true;
-            this.FileList.Location = new System.Drawing.Point(12, 51);
+            this.FileList.HideSelection = false;
+            this.FileList.Location = new System.Drawing.Point(30, 128);
+            this.FileList.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.FileList.Name = "FileList";
-            this.FileList.Size = new System.Drawing.Size(359, 460);
+            this.FileList.Size = new System.Drawing.Size(892, 1144);
             this.FileList.TabIndex = 0;
             this.FileList.UseCompatibleStateImageBehavior = false;
             this.FileList.View = System.Windows.Forms.View.Details;
@@ -63,19 +65,20 @@
             // 
             this.lv_FileType.Text = "文件类型";
             this.lv_FileType.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.lv_FileType.Width = 68;
+            this.lv_FileType.Width = 151;
             // 
             // lv_Status
             // 
             this.lv_Status.Text = "状态";
             this.lv_Status.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.lv_Status.Width = 67;
+            this.lv_Status.Width = 122;
             // 
             // AddButton
             // 
-            this.AddButton.Location = new System.Drawing.Point(12, 12);
+            this.AddButton.Location = new System.Drawing.Point(30, 30);
+            this.AddButton.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.AddButton.Name = "AddButton";
-            this.AddButton.Size = new System.Drawing.Size(77, 30);
+            this.AddButton.Size = new System.Drawing.Size(192, 75);
             this.AddButton.TabIndex = 1;
             this.AddButton.Text = "打开文件";
             this.AddButton.UseVisualStyleBackColor = true;
@@ -83,9 +86,10 @@
             // 
             // DeleteButton
             // 
-            this.DeleteButton.Location = new System.Drawing.Point(200, 12);
+            this.DeleteButton.Location = new System.Drawing.Point(500, 30);
+            this.DeleteButton.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.DeleteButton.Name = "DeleteButton";
-            this.DeleteButton.Size = new System.Drawing.Size(77, 30);
+            this.DeleteButton.Size = new System.Drawing.Size(192, 75);
             this.DeleteButton.TabIndex = 2;
             this.DeleteButton.Text = "从列表删除";
             this.DeleteButton.UseVisualStyleBackColor = true;
@@ -93,9 +97,10 @@
             // 
             // StartButton
             // 
-            this.StartButton.Location = new System.Drawing.Point(294, 12);
+            this.StartButton.Location = new System.Drawing.Point(735, 30);
+            this.StartButton.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.StartButton.Name = "StartButton";
-            this.StartButton.Size = new System.Drawing.Size(77, 30);
+            this.StartButton.Size = new System.Drawing.Size(192, 75);
             this.StartButton.TabIndex = 3;
             this.StartButton.Text = "转换";
             this.StartButton.UseVisualStyleBackColor = true;
@@ -103,9 +108,10 @@
             // 
             // AddFolderButton
             // 
-            this.AddFolderButton.Location = new System.Drawing.Point(106, 12);
+            this.AddFolderButton.Location = new System.Drawing.Point(265, 30);
+            this.AddFolderButton.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.AddFolderButton.Name = "AddFolderButton";
-            this.AddFolderButton.Size = new System.Drawing.Size(77, 30);
+            this.AddFolderButton.Size = new System.Drawing.Size(192, 75);
             this.AddFolderButton.TabIndex = 4;
             this.AddFolderButton.Text = "打开文件夹";
             this.AddFolderButton.UseVisualStyleBackColor = true;
@@ -115,17 +121,19 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label1.Location = new System.Drawing.Point(12, 529);
+            this.label1.Location = new System.Drawing.Point(30, 1322);
+            this.label1.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(152, 16);
+            this.label1.Size = new System.Drawing.Size(377, 40);
             this.label1.TabIndex = 5;
             this.label1.Text = "QQ音乐文件转换工具";
             // 
             // About
             // 
-            this.About.Location = new System.Drawing.Point(210, 517);
+            this.About.Location = new System.Drawing.Point(525, 1292);
+            this.About.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.About.Name = "About";
-            this.About.Size = new System.Drawing.Size(160, 37);
+            this.About.Size = new System.Drawing.Size(400, 92);
             this.About.TabIndex = 6;
             this.About.Text = "关于";
             this.About.UseVisualStyleBackColor = true;
@@ -133,9 +141,9 @@
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(15F, 30F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(384, 561);
+            this.ClientSize = new System.Drawing.Size(985, 1425);
             this.Controls.Add(this.About);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.AddFolderButton);
@@ -144,8 +152,11 @@
             this.Controls.Add(this.AddButton);
             this.Controls.Add(this.FileList);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "QMC转换器";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

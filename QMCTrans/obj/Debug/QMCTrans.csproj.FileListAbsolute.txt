@@ -1,0 +1,11 @@
+C:\Users\SongYuHao\Source\Repos\XiaoSong0919\QMCTrans\QMCTrans\bin\Debug\QMCTrans.exe.config
+C:\Users\SongYuHao\Source\Repos\XiaoSong0919\QMCTrans\QMCTrans\bin\Debug\QMCTrans.exe
+C:\Users\SongYuHao\Source\Repos\XiaoSong0919\QMCTrans\QMCTrans\bin\Debug\QMCTrans.pdb
+C:\Users\SongYuHao\Source\Repos\XiaoSong0919\QMCTrans\QMCTrans\obj\Debug\QMCTrans.csproj.AssemblyReference.cache
+C:\Users\SongYuHao\Source\Repos\XiaoSong0919\QMCTrans\QMCTrans\obj\Debug\QMCTrans.AboutBox1.resources
+C:\Users\SongYuHao\Source\Repos\XiaoSong0919\QMCTrans\QMCTrans\obj\Debug\QMCTrans.Form1.resources
+C:\Users\SongYuHao\Source\Repos\XiaoSong0919\QMCTrans\QMCTrans\obj\Debug\QMCTrans.Properties.Resources.resources
+C:\Users\SongYuHao\Source\Repos\XiaoSong0919\QMCTrans\QMCTrans\obj\Debug\QMCTrans.csproj.GenerateResource.cache
+C:\Users\SongYuHao\Source\Repos\XiaoSong0919\QMCTrans\QMCTrans\obj\Debug\QMCTrans.csproj.CoreCompileInputs.cache
+C:\Users\SongYuHao\Source\Repos\XiaoSong0919\QMCTrans\QMCTrans\obj\Debug\QMCTrans.exe
+C:\Users\SongYuHao\Source\Repos\XiaoSong0919\QMCTrans\QMCTrans\obj\Debug\QMCTrans.pdb

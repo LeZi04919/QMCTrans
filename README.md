@@ -1,13 +1,14 @@
 # QMCTrans
 QQ音乐解码程序，
-针对加密的qmcflac,qmc0,qmc3文件进行解密，用C#重写了。带GUI界面。现添加对mflac的实验性支持，
+针对加密的qmcflac,qmc0,qmc3,mflac,mflac0文件进行解密，用C#重写了。带GUI界面。现添加对mflac和mflac0的实验性支持，
 仅供交流学习使用。
 
 参考： https://github.com/MegrezZhu/qmcdump
 
-2020/04/21 Update: 
+2021/12/26 Update: 
 
-添加对mflac文件的支持,修复小bug。
+添加对mflac0文件的支持,修复小bug。
+
 参考：https://github.com/ix64/unlock-music/wiki 对mflac文件的说明。
 
 下面给出几点对Key，也就是掩码的说明：
